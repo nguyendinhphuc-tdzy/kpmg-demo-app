@@ -15,6 +15,7 @@ import PromptEditorModal from './components/modals/PromptEditorModal';
 import NewsDashboard from './components/modals/NewsDashboard';
 
 function App() {
+    // ... (Giữ nguyên toàn bộ phần State và Handlers như cũ) ...
     const [prompts, setPrompts] = useState(MOCK_PROMPTS);
     const [activeFilters, setActiveFilters] = useState({ 
         view: 'public',
@@ -26,7 +27,6 @@ function App() {
     const [sort, setSort] = useState('popular');
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     
-    // Modal States
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [selectedNews, setSelectedNews] = useState(null);
     const [ratingPrompt, setRatingPrompt] = useState(null);
@@ -34,7 +34,6 @@ function App() {
     
     const showToast = useToast();
 
-    // --- Handlers ---
     const toggleSidebar = useCallback(() => setIsSidebarCollapsed(prev => !prev), []);
 
     const handleToggleSave = useCallback((id) => {
@@ -76,7 +75,6 @@ function App() {
     
     const handleOpenEditor = useCallback((prompt) => setEditorPrompt(prompt), []);
     const handleCloseEditor = useCallback(() => setEditorPrompt(null), []);
-    
     const handleCreateNew = useCallback(() => handleOpenEditor({}), [handleOpenEditor]);
     
     const handleSavePrompt = useCallback((formData) => {
@@ -98,11 +96,8 @@ function App() {
         handleCloseEditor();
     }, [showToast, handleCloseEditor]);
     
-    //LOGIC LỌC & SẮP XẾP
     const filteredPrompts = useMemo(() => {
         let basePrompts = [];
-        
-        // 1. Filter by VIEW
         switch (activeFilters.view) {
             case 'myLibrary':
                 basePrompts = prompts.filter(p => p.ownerId === CURRENT_USER_ID);
@@ -111,40 +106,28 @@ function App() {
                 basePrompts = prompts.filter(p => p.isSaved);
                 break;
             case 'common':
-                // [MỚI] Common View: Chỉ lấy các prompt có tag 'All Departments'
                 basePrompts = prompts.filter(p => p.status === 'public' && p.tags.department === 'All Departments');
                 break;
             case 'public':
             case 'news':
             default:
-                // [MỚI] Public View: Loại bỏ các prompt 'All Departments' (để tránh trùng lặp)
                 basePrompts = prompts.filter(p => p.status === 'public' && p.tags.department !== 'All Departments');
                 break;
         }
         
-        // 2. Filter by Search & Tags
         basePrompts = basePrompts.filter(p => {
             const lowerSearch = search.toLowerCase();
             const matchSearch = p.title.toLowerCase().includes(lowerSearch) || 
-                              p.description.toLowerCase().includes(lowerSearch) ||
-                              p.template.toLowerCase().includes(lowerSearch);
+                              p.description.toLowerCase().includes(lowerSearch);
             
-            let matchDept = true;
-
-            // Logic lọc Department
+            let matchDept = false;
             if (activeFilters.view === 'public') {
-                 // Ở Prompt Library: Phải khớp chính xác với bộ lọc (ví dụ: Partner, Tax...)
-                 // Lưu ý: Bộ lọc 'All Departments' đã bị xóa khỏi dropdown ở Sidebar
                  matchDept = p.tags.department === activeFilters.department;
-            } 
-            else if (activeFilters.view === 'common') {
-                 // Ở Common Prompt: Không cần lọc department nữa (vì đã lọc ở bước 1)
+            } else if (activeFilters.view === 'common') {
                  matchDept = true;
-            }
-            else {
-                 // Ở My Library/Favorites: 
+            } else {
                  if (activeFilters.department === 'All Departments') {
-                     matchDept = true; // Hiện hết
+                     matchDept = true;
                  } else {
                      matchDept = p.tags.department === activeFilters.department;
                  }
@@ -155,11 +138,9 @@ function App() {
             return matchSearch && matchDept && matchTask;
         });
         
-        // 3. Sắp xếp (Sort)
         if (sort === 'rating') return basePrompts.sort((a,b) => b.stats.rating - a.stats.rating);
         if (sort === 'newest') return basePrompts.sort((a,b) => b.id - a.id);
         
-        // Default: Popular (Top 3 logic)
         const topRatedIds = new Set([...basePrompts].sort((a, b) => b.stats.rating - a.stats.rating).slice(0, 3).map(p => p.id));
         const topRated = basePrompts.filter(p => topRatedIds.has(p.id)).sort((a, b) => b.stats.rating - a.stats.rating);
         const others = basePrompts.filter(p => !topRatedIds.has(p.id)).sort((a, b) => b.stats.use_count - a.stats.use_count);
@@ -168,8 +149,11 @@ function App() {
 
     }, [prompts, search, activeFilters, sort]);
 
+    // --- JSX ĐÃ ĐƯỢC TINH CHỈNH RESPONSIVE ---
     return (
-        <div className="flex h-screen overflow-hidden bg-[#F8F9FC]">
+        <div className="flex h-screen w-full bg-[#F8F9FC] overflow-hidden">
+            
+            {/* Sidebar: Cố định chiều rộng, flex-shrink-0 để không bị co */}
             <Sidebar 
                 activeFilters={activeFilters} 
                 setActiveFilters={setActiveFilters} 
@@ -177,7 +161,11 @@ function App() {
                 toggleSidebar={toggleSidebar} 
                 savedCount={prompts.filter(p => p.isSaved).length} 
             />
-            <div className="flex-1 flex flex-col overflow-hidden">
+            
+            {/* Main Area: Flex-1 để chiếm phần còn lại, flex-col để header trên body dưới */}
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
+                
+                {/* Header */}
                 <Header 
                     search={search} 
                     setSearch={setSearch} 
@@ -187,10 +175,11 @@ function App() {
                     onCreateNew={handleCreateNew}
                 />
                 
-                {/* Main Content Area */}
-                <main className="flex-1 overflow-y-auto p-8 relative">
+                {/* Content: Flex-1 để chiếm hết chiều cao còn lại, overflow-y-auto để cuộn */}
+                <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative scrollbar-hide">
                     {filteredPrompts.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8 pb-20">
+                        // Grid Responsive: Tự động chia cột theo % màn hình
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 pb-20">
                             {filteredPrompts.map((prompt, index) => (
                                 <PromptCard
                                     key={prompt.id}
@@ -206,7 +195,6 @@ function App() {
                             ))}
                         </div>
                     ) : (
-                        // Empty State
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                             <div className="bg-gray-100 p-6 rounded-full mb-4">
                                 <Icon name="folder-search" size={48} className="opacity-50" />
@@ -245,8 +233,8 @@ function App() {
                 maxWidth="max-w-3xl"
             >
                 <div className="space-y-6">
-                    <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
-                        <Icon name="info" size={20} className="text-blue-600 mt-1 flex-shrink-0" />
+                    <div className="flex items-start gap-3 p-4 bg-kpmg-blue/5 rounded-lg">
+                        <Icon name="info" size={20} className="text-kpmg-blue mt-1 flex-shrink-0" />
                         <p className="text-gray-700 leading-relaxed">{selectedNews?.description}</p>
                     </div>
                     <div className="border-t border-gray-200 pt-6">
