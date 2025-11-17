@@ -25,7 +25,7 @@ const RatingModal = React.memo(({ prompt, isOpen, onClose, onSubmit }) => {
     
     const modalTitle = `Feedback for: ${prompt.title}`;
     
-    const modalFooter = (
+const modalFooter = (
         <>
             <button
                 onClick={onClose}
@@ -35,7 +35,8 @@ const RatingModal = React.memo(({ prompt, isOpen, onClose, onSubmit }) => {
             </button>
             <button
                 onClick={handleSubmit}
-                className="px-5 py-2.5 rounded-lg font-semibold text-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                // Dùng bg-kpmg-blue
+                className="px-5 py-2.5 rounded-lg font-semibold text-sm text-white bg-kpmg-blue hover:bg-kpmg-blue/90 transition-colors"
             >
                 Submit Feedback
             </button>

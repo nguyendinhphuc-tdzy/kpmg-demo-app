@@ -77,7 +77,7 @@ const PromptEditorModal = React.memo(({ prompt, isOpen, onClose, onSave }) => {
             </button>
             <button
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-lg font-semibold text-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="px-5 py-2.5 rounded-lg font-semibold text-sm text-white bg-kpmg-blue hover:bg-kpmg-blue/90 transition-colors"
             >
                 {isNew ? 'Create Private Prompt' : 'Save Changes'}
             </button>

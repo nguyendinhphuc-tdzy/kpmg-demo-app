@@ -2,10 +2,14 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // <--- SỬA THÀNH 'src'
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
+      colors: {
+        'kpmg-blue': '#00338D', // Màu xanh chính của KPMG
+        'kpmg-light': '#4c66ac', // Màu xanh nhạt hơn (dùng cho hover nếu cần)
+      },
       animation: {
           'fade-in': 'fadeIn 0.3s ease-out',
           'slide-up': 'slideUp 0.3s ease-out',

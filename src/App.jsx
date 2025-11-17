@@ -98,7 +98,7 @@ function App() {
         handleCloseEditor();
     }, [showToast, handleCloseEditor]);
     
-    // --- LOGIC LỌC & SẮP XẾP (ĐÃ CHIA TÁCH COMMON PROMPT) ---
+    //LOGIC LỌC & SẮP XẾP
     const filteredPrompts = useMemo(() => {
         let basePrompts = [];
         
