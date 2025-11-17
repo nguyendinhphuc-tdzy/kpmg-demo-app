@@ -173,7 +173,7 @@ function App() {
                 />
                 
                 {/* Content Area */}
-                <main className="flex-1 overflow-y-auto p-4 md:p-6 relative scrollbar-hide">
+                <main className="flex-1 p-4 md:p-6 relative">
                     {filteredPrompts.length > 0 ? (
                         // Grid Grid Responsive tinh chỉnh lại để an toàn hơn trên màn hình nhỏ
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 pb-24">
