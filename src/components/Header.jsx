@@ -3,12 +3,12 @@ import { Icon } from './Icon';
 
 const Header = React.memo(({ search, setSearch, sort, setSort, activeView, onCreateNew }) => {
            
-    // === THAY ĐỔI TIÊU ĐỀ Ở ĐÂY ===
-    const title = activeView === 'public' ? 'Prompt Library Demo' : 
-                  activeView === 'myLibrary' ? 'My Library' : 
-                  activeView === 'myFavorites' ? 'My Favourite Prompts' :
-                  'Prompt Library Demo'; // Giữ tiêu đề chính khi 'news' mở
-    // ===========================
+    // === CẬP NHẬT TIÊU ĐỀ ===
+    let title = 'Prompt Library Demo';
+    if (activeView === 'common') title = 'Common Prompt';
+    if (activeView === 'myLibrary') title = 'My Library';
+    if (activeView === 'myFavorites') title = 'My Favourite Prompts';
+    // ========================
     
     return (
         <header className="bg-white px-8 py-5 border-b border-blue-600/20 flex flex-col md:flex-row justify-between items-center gap-4 sticky top-0 z-10 shadow-sm">
@@ -26,7 +26,7 @@ const Header = React.memo(({ search, setSearch, sort, setSort, activeView, onCre
                     </button>
                 )}
                 
-                {/* Luôn hiển thị các nút này */}
+                {/* Search & Sort */}
                 <>
                     <div className="relative flex-1 sm:flex-none sm:w-80">
                         <input type="text" placeholder="Search prompts..." className="w-full pl-14 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
