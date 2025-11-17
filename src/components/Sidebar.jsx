@@ -20,7 +20,7 @@ const Sidebar = React.memo(({ activeFilters, setActiveFilters, isCollapsed, togg
 
     return (
         <aside 
-            className={`${isCollapsed ? 'w-20 px-2' : 'w-64 lg:w-72 xl:w-80 p-4 lg:p-6'} bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 flex flex-col z-20 h-full`}
+            className={`${isCollapsed ? 'w-20 px-2' : 'w-64 xl:w-72 p-4'} bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 flex flex-col z-20 h-full`}
         >
             <div className={`flex items-center mb-6 lg:mb-10 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                 {!isCollapsed && (

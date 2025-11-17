@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Các class scrollbar-hide từ file HTML của bạn */
+/* Khóa cuộn của trình duyệt để App tự quản lý cuộn */
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Quan trọng: Ngăn cuộn ngoài lề */
+}
+
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }

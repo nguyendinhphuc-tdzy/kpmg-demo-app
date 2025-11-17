@@ -151,10 +151,10 @@ function App() {
 
     // --- JSX ĐÃ ĐƯỢC TINH CHỈNH RESPONSIVE ---
     return (
-        <div className="flex h-screen w-full bg-[#F8F9FC] overflow-hidden">
+        <div className="flex h-[100dvh] w-full bg-[#F8F9FC] overflow-hidden">
             
             {/* Sidebar: Cố định chiều rộng, flex-shrink-0 để không bị co */}
-            <Sidebar 
+<Sidebar 
                 activeFilters={activeFilters} 
                 setActiveFilters={setActiveFilters} 
                 isCollapsed={isSidebarCollapsed} 
@@ -162,10 +162,7 @@ function App() {
                 savedCount={prompts.filter(p => p.isSaved).length} 
             />
             
-            {/* Main Area: Flex-1 để chiếm phần còn lại, flex-col để header trên body dưới */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
-                
-                {/* Header */}
                 <Header 
                     search={search} 
                     setSearch={setSearch} 
@@ -175,11 +172,11 @@ function App() {
                     onCreateNew={handleCreateNew}
                 />
                 
-                {/* Content: Flex-1 để chiếm hết chiều cao còn lại, overflow-y-auto để cuộn */}
-                <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative scrollbar-hide">
+                {/* Content Area */}
+                <main className="flex-1 overflow-y-auto p-4 md:p-6 relative scrollbar-hide">
                     {filteredPrompts.length > 0 ? (
-                        // Grid Responsive: Tự động chia cột theo % màn hình
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 pb-20">
+                        // Grid Grid Responsive tinh chỉnh lại để an toàn hơn trên màn hình nhỏ
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 pb-24">
                             {filteredPrompts.map((prompt, index) => (
                                 <PromptCard
                                     key={prompt.id}
@@ -195,6 +192,7 @@ function App() {
                             ))}
                         </div>
                     ) : (
+                        // Empty State
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                             <div className="bg-gray-100 p-6 rounded-full mb-4">
                                 <Icon name="folder-search" size={48} className="opacity-50" />
@@ -216,7 +214,7 @@ function App() {
                 />
             </div>
             
-            {/* Modals */}
+            {/* ... (Các Modal giữ nguyên) ... */}
             <PromptModal prompt={selectedPrompt} isOpen={!!selectedPrompt} onClose={() => setSelectedPrompt(null)} onToggleSave={handleToggleSave} />
             <RatingModal prompt={ratingPrompt} isOpen={!!ratingPrompt} onClose={() => setRatingPrompt(null)} onSubmit={handleSubmitRating} />
             <PromptEditorModal prompt={editorPrompt} isOpen={!!editorPrompt} onClose={handleCloseEditor} onSave={handleSavePrompt} />
