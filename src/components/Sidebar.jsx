@@ -20,7 +20,7 @@ const Sidebar = React.memo(({ activeFilters, setActiveFilters, isCollapsed, togg
 
     return (
         <aside 
-            className={`${isCollapsed ? 'w-20 px-2' : 'w-64 xl:w-72 p-4'} bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 flex flex-col z-20 h-full`}
+            className={`${isCollapsed ? 'w-20 px-2' : 'w-64 xl:w-72 p-4'} bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 flex flex-col z-20 min-h-screen`}
         >
             <div className={`flex items-center mb-6 lg:mb-10 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                 {!isCollapsed && (
@@ -31,33 +31,40 @@ const Sidebar = React.memo(({ activeFilters, setActiveFilters, isCollapsed, togg
                 </button>
             </div>
             
-            <div className={`flex-1 space-y-6 lg:space-y-8 overflow-y-auto scrollbar-hide ${isCollapsed ? 'hidden' : 'block'}`}>
+            <div className={`flex-1 space-y-6 lg:space-y-8 ${isCollapsed ? 'hidden' : 'block'}`}>
                 
                 {/* Filters */}
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Department</label>
                         <div className="relative">
-                            <select className="w-full p-2.5 pl-3 pr-8 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-kpmg-blue focus:border-kpmg-blue outline-none transition-all font-medium text-gray-700 truncate"
+                            {/* Thêm class 'appearance-none' và 'bg-transparent' để ẩn mũi tên mặc định */}
+                            <select className="w-full p-2.5 pl-3 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-kpmg-blue focus:border-kpmg-blue outline-none transition-all font-medium text-gray-700 truncate appearance-none"
                                 value={activeFilters.department} 
                                 onChange={(e) => setFilter('department', e.target.value)}
                                 disabled={activeFilters.view === 'common'}
                             >
                                 {ALL_DEPARTMENTS.filter(dept => dept !== 'All Departments').map(dept => <option key={dept} value={dept}>{dept}</option>)}
                             </select>
-                            <Icon name="chevron-down" size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                            
+                            {/* Icon mũi tên tùy chỉnh (nằm đè lên mũi tên mặc định nếu có) */}
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+                                <Icon name="chevron-down" size={16} className="text-gray-500" />
+                            </div>
                         </div>
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Task</label>
                         <div className="relative">
-                            <select className="w-full p-2.5 pl-3 pr-8 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-kpmg-blue focus:border-kpmg-blue outline-none transition-all font-medium text-gray-700 truncate"
+                            <select className="w-full p-2.5 pl-3 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-kpmg-blue focus:border-kpmg-blue outline-none transition-all font-medium text-gray-700 truncate appearance-none"
                                 value={activeFilters.task} 
                                 onChange={(e) => setFilter('task', e.target.value)}
                             >
                                 {ALL_TASKS.map(task => <option key={task} value={task}>{task}</option>)}
                             </select>
-                            <Icon name="chevron-down" size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+                                <Icon name="chevron-down" size={16} className="text-gray-500" />
+                            </div>
                         </div>
                     </div>
                 </div>
